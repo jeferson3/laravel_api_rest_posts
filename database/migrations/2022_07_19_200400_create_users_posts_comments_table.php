@@ -14,6 +14,7 @@ class CreateUsersPostsCommentsTable extends Migration
     public function up()
     {
         Schema::create('users_post_comment', function (Blueprint $table) {
+            $table->id();
             $table->text('comment');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('post_id');
@@ -24,8 +25,6 @@ class CreateUsersPostsCommentsTable extends Migration
             $table->foreign('post_id')
                 ->on('posts')
                 ->references('id');
-
-            $table->primary(['user_id', 'post_id']);
 
             $table->timestamps();
         });

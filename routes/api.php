@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,8 +12,15 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::group(['prefix' => '/auth'], function (){
+    Route::post('/login', [\App\Http\Controllers\Auth\AuthController::class, 'login']);
+});
 
-//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
-//Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->middleware('auth:api');
+Route::group(['prefix' => '/', 'middleware' => 'jwt'], function (){
+    Route::get('/posts', [\App\Http\Controllers\Customer\CustomerController::class, 'index']);
+    Route::post('/posts/{post}/comment', [\App\Http\Controllers\Customer\CustomerController::class, 'comment']);
+    Route::post('/posts/{post}/like', [\App\Http\Controllers\Customer\CustomerController::class, 'like']);
+    Route::group(['prefix' => '/admin'], function (){
+        Route::apiResource('posts', \App\Http\Controllers\Admin\PostController::class);
+    });
+});
