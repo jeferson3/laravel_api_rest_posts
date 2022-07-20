@@ -7,11 +7,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -69,6 +68,19 @@ class User extends Authenticatable
     public function Comments(): BelongsToMany
     {
         return $this->belongsToMany(Post::class, 'user_post_comment');
+    }
+
+    /**
+     * @param $token
+     * @return array
+     */
+    public function responseWithToken($token): array
+    {
+        return [
+            'status'    => true,
+            'timestamp' => now(),
+            'token'     => $token
+        ];
     }
 
 }
