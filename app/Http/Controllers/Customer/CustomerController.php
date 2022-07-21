@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Customer\PostCommentRequest;
 use App\Http\Requests\RequestValidation;
 use App\Http\Resources\FailResponseResource;
 use App\Http\Resources\PaginationResponseResource;
@@ -89,8 +90,7 @@ class CustomerController extends Controller
      *              mediaType="application/x-www-form-urlencoded",
      *              @OA\Schema(
      *                  type="object",
-     *                  required={"user_id", "comment"},
-     *                  @OA\Property(property="user_id", type="integer" , example="1"),
+     *                  required={"comment"},
      *                  @OA\Property(property="comment", type="string" , example="teste comment")
      *              )
      *          )
@@ -109,11 +109,11 @@ class CustomerController extends Controller
      *    )
      *
      *
-     * @param RequestValidation $request
+     * @param PostCommentRequest $request
      * @param Post $post
      * @return JsonResponse
      */
-    public function comment(RequestValidation $request, Post $post): JsonResponse
+    public function comment(PostCommentRequest $request, Post $post): JsonResponse
     {
         if ($status = $this->postRepository->comment($request->all(), $post)) {
             return (new SuccessResponseResource($status))
@@ -137,18 +137,6 @@ class CustomerController extends Controller
      *     tags={"Customer-Post"},
      *     security={{ "jwt": {} }},
      *
-     *     @OA\RequestBody(
-     *          required=true,
-     *          @OA\MediaType(
-     *              mediaType="application/x-www-form-urlencoded",
-     *              @OA\Schema(
-     *                  type="object",
-     *                  required={"user_id"},
-     *                  @OA\Property(property="user_id", type="integer" , example="1")
-     *              )
-     *          )
-     *      ),
-     *
      *     @OA\Parameter(
      *          name="post",
      *          in="path",
@@ -162,11 +150,11 @@ class CustomerController extends Controller
      *    )
      *
      *
-     * @param RequestValidation $request
+     * @param Request $request
      * @param Post $post
      * @return JsonResponse
      */
-    public function like(RequestValidation $request, Post $post): JsonResponse
+    public function like(Request $request, Post $post): JsonResponse
     {
         if ($status = $this->postRepository->like($request->all(), $post)) {
             return (new SuccessResponseResource($status))
