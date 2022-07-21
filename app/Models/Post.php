@@ -35,7 +35,8 @@ class Post extends Model
      */
     public function Likes(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'user_post_like');
+        return $this->belongsToMany(User::class, 'user_post_like')
+            ->withPivot('date');
     }
 
     /**
@@ -44,7 +45,8 @@ class Post extends Model
      */
     public function Comments(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'user_post_comment');
+        return $this->belongsToMany(User::class, 'user_post_comment')
+            ->withPivot('date', 'comment');
     }
 
 }
