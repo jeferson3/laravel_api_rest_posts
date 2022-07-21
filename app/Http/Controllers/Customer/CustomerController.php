@@ -30,6 +30,7 @@ class CustomerController extends Controller
      *     @OA\Response(response="200", description="Response with success"),
      *
      *     tags={"Customer-Post"},
+     *     security={{ "jwt": {} }},
      *
      *     @OA\Parameter(
      *          name="limit",
@@ -80,6 +81,7 @@ class CustomerController extends Controller
      *     @OA\Response(response="400", description="Response with error"),
      *     @OA\Response(response="404", description="Response with error"),
      *     tags={"Customer-Post"},
+     *     security={{ "jwt": {} }},
      *
      *     @OA\RequestBody(
      *          required=true,
@@ -133,6 +135,7 @@ class CustomerController extends Controller
      *     @OA\Response(response="400", description="Response with error"),
      *     @OA\Response(response="404", description="Response with error"),
      *     tags={"Customer-Post"},
+     *     security={{ "jwt": {} }},
      *
      *     @OA\RequestBody(
      *          required=true,

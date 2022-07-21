@@ -10,6 +10,12 @@ use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('jwt')
+            ->only('logout');
+    }
+
     /**
      * @OA\Post (
      *     path="/auth/login",
@@ -51,6 +57,7 @@ class AuthController extends Controller
      *     summary="PostController",
      *     @OA\Response(response="200", description="Response with success"),
      *     tags={"Auth"},
+     *     security={{ "jwt": {} }}
      *    )
      *
      * @return JsonResponse
