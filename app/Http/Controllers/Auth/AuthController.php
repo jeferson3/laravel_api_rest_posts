@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Customer\LoginRequest;
 use App\Http\Resources\FailResponseResource;
+use App\Http\Resources\SuccessResponseResource;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Request;
 
 class AuthController extends Controller
 {
@@ -32,16 +33,33 @@ class AuthController extends Controller
      *
      *    )
      *
+     * @param LoginRequest $request
      * @return JsonResponse
      */
-    public function login(): JsonResponse
+    public function login(LoginRequest $request): JsonResponse
     {
-        return response()->json(\request()->all());
-        if (auth()->guard('api')->attempt(\request(['email', 'password']))){
-            return response()->json(auth()->user()->responseWithToken(), 200);
+        if ($token = auth()->guard('api')->attempt($request->only('email', 'password'))){
+            return response()->json(auth()->user()->responseWithToken($token), 200);
         }
         return (new FailResponseResource(false))
-            ->response([], 401);
+            ->response()
+            ->setStatusCode(401);
+    }
+    /**
+     * @OA\Post (
+     *     path="/auth/logout",
+     *     summary="PostController",
+     *     @OA\Response(response="200", description="Response with success"),
+     *     tags={"Auth"},
+     *    )
+     *
+     * @return JsonResponse
+     */
+    public function logout(): JsonResponse
+    {
+        auth()->logout();
+        return (new SuccessResponseResource(true))
+            ->response();
     }
 
 }
