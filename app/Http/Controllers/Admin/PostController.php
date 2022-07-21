@@ -9,6 +9,7 @@ use App\Http\Resources\PaginationResponseResource;
 use App\Http\Resources\SuccessResponseResource;
 use App\Models\Post;
 use App\Repositories\Admin\Post\PostRepository;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -21,7 +22,7 @@ class PostController extends Controller
     }
 
     /**
-     * Exchange Rate - return data of database
+     * Post - return data of database
      *
      * @OA\Get (
      *     path="/admin/posts",
@@ -50,10 +51,10 @@ class PostController extends Controller
      *          ),
      *     ),
      *     @OA\Parameter(
-     *          name="coin",
+     *          name="search",
      *          in="query",
      *          required=false,
-     *          description="filter - coin name",
+     *          description="filter - title or description",
      *          @OA\Schema(
      *              type="string"
      *          ),
@@ -61,9 +62,9 @@ class PostController extends Controller
      *    )
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse|object
+     * @return JsonResponse
      */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         return (new PaginationResponseResource($this->postRepository->getAll($request->toArray())))
             ->response()
@@ -71,13 +72,13 @@ class PostController extends Controller
     }
 
     /**
-     * Exchange Rate - Store a newly created resource in storage.
+     * Post - Store a newly created resource in storage.
      *
      * @OA\Post (
      *     path="/admin/posts",
      *     summary="PostController",
      *     @OA\Response(response="200", description="Response with success"),
-     *     @OA\Response(response="404", description="Response with error"),
+     *     @OA\Response(response="400", description="Response with error"),
      *     tags={"Admin-Post"},
      *     security={{ "jwt": {} }},
      *
@@ -87,9 +88,9 @@ class PostController extends Controller
      *              mediaType="application/x-www-form-urlencoded",
      *              @OA\Schema(
      *                  type="object",
-     *                  required={"coin", "value"},
-     *                  @OA\Property(property="coin", type="string" , example="dollar"),
-     *                  @OA\Property(property="value", type="float" , example="10.5"),
+     *                  required={"title", "description"},
+     *                  @OA\Property(property="title", type="string" , example="title"),
+     *                  @OA\Property(property="description", type="string" , example="description"),
      *              )
      *          )
      *      )
@@ -98,9 +99,9 @@ class PostController extends Controller
      *
      *
      * @param RequestValidation $request
-     * @return \Illuminate\Http\JsonResponse|object
+     * @return JsonResponse
      */
-    public function store(RequestValidation $request)
+    public function store(RequestValidation $request): JsonResponse
     {
         if ($status = $this->postRepository->create($request->all())) {
             return (new SuccessResponseResource($status))
@@ -115,9 +116,10 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      * @OA\Put (
-     *     path="/admin/posts/{exchange_rate}",
+     *     path="/admin/posts/{post}",
      *     summary="PostController",
      *     @OA\Response(response="200", description="Response with success"),
+     *     @OA\Response(response="400", description="Response with error"),
      *     @OA\Response(response="404", description="Response with error"),
      *     tags={"Admin-Post"},
      *     security={{ "jwt": {} }},
@@ -128,17 +130,17 @@ class PostController extends Controller
      *              mediaType="application/x-www-form-urlencoded",
      *              @OA\Schema(
      *                  type="object",
-     *                  required={"coin", "value"},
-     *                  @OA\Property(property="coin", type="string" , example="dollar"),
-     *                  @OA\Property(property="value", type="float" , example="10.5"),
+     *                  required={"title", "description"},
+     *                  @OA\Property(property="title", type="string" , example="title"),
+     *                  @OA\Property(property="description", type="string" , example="description"),
      *              )
      *          ),
      *      ),
      *      @OA\Parameter(
-     *          name="exchange_rate",
+     *          name="post",
      *          in="path",
      *          required=true,
-     *          description="exchange rate ID",
+     *          description="post ID",
      *          @OA\Schema(
      *              type="string"
      *          ),
@@ -146,9 +148,9 @@ class PostController extends Controller
      *    )
      * @param RequestValidation $request
      * @param Post $post
-     * @return \Illuminate\Http\JsonResponse|object
+     * @return JsonResponse
      */
-    public function update(RequestValidation $request, Post $post)
+    public function update(RequestValidation $request, Post $post): JsonResponse
     {
         if ($status = $this->postRepository->update($post, $request->all())) {
             return (new SuccessResponseResource($status))
@@ -164,27 +166,28 @@ class PostController extends Controller
      * Remove the specified resource from storage.
      *
      * @OA\Delete (
-     *     path="/admin/posts/{exchange_rate}",
+     *     path="/admin/posts/{post}",
      *     summary="PostController",
      *     @OA\Response(response="200", description="Response with success"),
+     *     @OA\Response(response="400", description="Response with error"),
      *     @OA\Response(response="404", description="Response with error"),
      *     tags={"Admin-Post"},
      *     security={{ "jwt": {} }},
      *
      *     @OA\Parameter(
-     *          name="exchange_rate",
+     *          name="post",
      *          in="path",
      *          required=true,
-     *          description="exchange rate ID",
+     *          description="post ID",
      *          @OA\Schema(
      *              type="string"
      *          ),
      *     ),
      *    )
      * @param Post $post
-     * @return \Illuminate\Http\JsonResponse|object
+     * @return JsonResponse
      */
-    public function destroy(Post $post)
+    public function destroy(Post $post): JsonResponse
     {
         if ($status = $this->postRepository->delete($post)) {
             return (new SuccessResponseResource($status))

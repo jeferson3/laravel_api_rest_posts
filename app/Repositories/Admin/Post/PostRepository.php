@@ -35,8 +35,8 @@ final class PostRepository implements PostRepositoryInterface
         }
 
         return [
-            'data'      => $this->post->whereRaw($where, $bind)->limit($limit)->offset(($page - 1) * $limit)->get(),
-            'total'     => $this->post->whereRaw($where, $bind)->count(),
+            'data'      => auth()->user()->Posts()->whereRaw($where, $bind)->limit($limit)->offset(($page - 1) * $limit)->get(),
+            'total'     => auth()->user()->Posts()->whereRaw($where, $bind)->count(),
             'page'      => $page,
             'per_page'  => $limit
         ];
@@ -52,7 +52,7 @@ final class PostRepository implements PostRepositoryInterface
         return $this->post->create([
             'title'        => $request['title'],
             'description'  => $request['description'],
-            'user_id'      => $request['user_id']
+            'user_id'      => auth()->user()->id
         ]);
     }
 
