@@ -8,6 +8,7 @@ use App\Models\Store\Store;
 use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
@@ -29,9 +30,9 @@ class Jwt
      *
      * @param  Request  $request
      * @param  Closure  $next
-     * @return JsonResponse
+     * @return mixed
      */
-    public function handle(Request $request, Closure $next): JsonResponse
+    public function handle(Request $request, Closure $next): mixed
     {
         try {
             JWTAuth::parseToken()->authenticate();
