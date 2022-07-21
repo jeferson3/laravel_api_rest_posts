@@ -23,7 +23,7 @@ class Comment extends JsonResource
             'name'          => $this->name,
             'email'         => $this->email,
             'comment'       => $this->pivot->comment,
-            "data"          => Carbon::make($this->pivot->date)->format('d/m/Y H:i:s'),
+            "date"          => Carbon::make($this->pivot->date)->format('d/m/Y H:i:s'),
         ];
     }
 }
