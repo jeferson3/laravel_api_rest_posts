@@ -35,7 +35,7 @@ final class PostRepository implements PostRepositoryInterface
         }
 
         return [
-            'data'      => $this->post->with('Likes', 'Comments')->whereRaw($where, $bind)->orderBy('id', 'desc')->limit($limit)->offset(($page - 1) * $limit)->get(),
+            'data'      => \App\Http\Resources\Customer\Post::collection($this->post->with('User', 'Comments')->withCount('Likes')->whereRaw($where, $bind)->orderBy('id', 'desc')->limit($limit)->offset(($page - 1) * $limit)->get()),
             'total'     => $this->post->whereRaw($where, $bind)->count(),
             'page'      => $page,
             'per_page'  => $limit
@@ -50,7 +50,7 @@ final class PostRepository implements PostRepositoryInterface
      */
     public function comment(array $request, Post $post): Post|null
     {
-        $post->Comments()->attach($request['user_id'], ['comment' => $request['comment']]);
+        $post->Comments()->attach(auth()->user()->id, ['comment' => $request['comment']]);
         return $post->loadCount('Comments', 'Likes');
     }
 
@@ -62,8 +62,13 @@ final class PostRepository implements PostRepositoryInterface
      */
     public function like(array $request, Post $post): Post|null
     {
-        $post->Likes()->attach($request['user_id']);
-        return $post->loadCount('Comments', 'Likes');
+        try {
+            $post->Likes()->attach(auth()->user()->id);
+            return $post;
+        }
+        catch (\Exception $exception){
+            return null;
+        }
     }
 
 }
