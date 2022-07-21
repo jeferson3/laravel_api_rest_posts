@@ -51,8 +51,7 @@ final class PostRepository implements PostRepositoryInterface
     {
         return $this->post->create([
             'title'        => $request['title'],
-            'description'  => $request['description'],
-            'user_id'      => auth()->user()->id
+            'description'  => $request['description']
         ]);
     }
 
