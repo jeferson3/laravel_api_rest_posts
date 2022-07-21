@@ -14,9 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 Route::group(['prefix' => '/auth'], function (){
     Route::post('/login', [\App\Http\Controllers\Auth\AuthController::class, 'login']);
+    Route::post('/logout', [\App\Http\Controllers\Auth\AuthController::class, 'logout']);
 });
 
-Route::group(['prefix' => '/', 'middleware' => 'jwt'], function (){
+Route::group(['prefix' => '/', 'middleware' => 'api'], function (){
     Route::get('/posts', [\App\Http\Controllers\Customer\CustomerController::class, 'index']);
     Route::post('/posts/{post}/comment', [\App\Http\Controllers\Customer\CustomerController::class, 'comment']);
     Route::post('/posts/{post}/like', [\App\Http\Controllers\Customer\CustomerController::class, 'like']);
