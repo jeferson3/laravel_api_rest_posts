@@ -35,7 +35,7 @@ final class PostRepository implements PostRepositoryInterface
         }
 
         return [
-            'data'      => auth()->user()->Posts()->whereRaw($where, $bind)->orderBy('id', 'desc')->limit($limit)->offset(($page - 1) * $limit)->get(),
+            'data'      => \App\Http\Resources\Admin\Post::collection(auth()->user()->Posts()->whereRaw($where, $bind)->orderBy('id', 'desc')->limit($limit)->offset(($page - 1) * $limit)->get()),
             'total'     => auth()->user()->Posts()->whereRaw($where, $bind)->count(),
             'page'      => $page,
             'per_page'  => $limit
