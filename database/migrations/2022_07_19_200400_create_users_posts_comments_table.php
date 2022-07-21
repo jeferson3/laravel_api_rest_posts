@@ -18,6 +18,8 @@ class CreateUsersPostsCommentsTable extends Migration
             $table->text('comment');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('post_id');
+            $table->dateTime('date')
+                ->default(\Illuminate\Support\Facades\DB::raw('CURRENT_TIMESTAMP'));
 
             $table->foreign('user_id')
                 ->on('users')
@@ -31,7 +33,6 @@ class CreateUsersPostsCommentsTable extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
-            $table->timestamps();
         });
     }
 

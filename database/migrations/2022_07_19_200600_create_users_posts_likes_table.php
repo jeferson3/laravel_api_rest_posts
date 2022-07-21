@@ -16,6 +16,8 @@ class CreateUsersPostsLikesTable extends Migration
         Schema::create('user_post_like', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('post_id');
+            $table->dateTime('date')
+                ->default(\Illuminate\Support\Facades\DB::raw('CURRENT_TIMESTAMP'));
 
             $table->foreign('user_id')
                 ->on('users')
@@ -31,7 +33,6 @@ class CreateUsersPostsLikesTable extends Migration
 
             $table->primary(['user_id', 'post_id']);
 
-            $table->timestamps();
         });
     }
 
