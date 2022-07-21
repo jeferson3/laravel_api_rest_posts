@@ -8,6 +8,8 @@ use App\Http\Requests\RequestValidation;
 use App\Http\Resources\FailResponseResource;
 use App\Http\Resources\PaginationResponseResource;
 use App\Http\Resources\SuccessResponseResource;
+use App\Jobs\CommentJob;
+use App\Jobs\LikeJob;
 use App\Models\Post;
 use App\Repositories\Customer\Post\PostRepository;
 use Illuminate\Http\JsonResponse;
@@ -115,14 +117,10 @@ class CustomerController extends Controller
      */
     public function comment(PostCommentRequest $request, Post $post): JsonResponse
     {
-        if ($status = $this->postRepository->comment($request->all(), $post)) {
-            return (new SuccessResponseResource($status))
-                ->response()
-                ->setStatusCode(200);
-        }
-        return (new FailResponseResource($status))
+        CommentJob::dispatchAfterResponse($post, $this->postRepository);
+        return (new SuccessResponseResource(true))
             ->response()
-            ->setStatusCode(400);
+            ->setStatusCode(200);
     }
 
     /**
@@ -156,14 +154,10 @@ class CustomerController extends Controller
      */
     public function like(Request $request, Post $post): JsonResponse
     {
-        if ($status = $this->postRepository->like($request->all(), $post)) {
-            return (new SuccessResponseResource($status))
-                ->response()
-                ->setStatusCode(200);
-        }
-        return (new FailResponseResource($status))
+        LikeJob::dispatchAfterResponse($post, $this->postRepository);
+        return (new SuccessResponseResource(true))
             ->response()
-            ->setStatusCode(400);
+            ->setStatusCode(200);
     }
 
 }
