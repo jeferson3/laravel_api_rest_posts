@@ -29,13 +29,13 @@ final class PostRepository implements PostRepositoryInterface
 
         $where = " 1=1 ";
         $bind  = array();
-        if (isset($request['coin'])) {
-            $where .= " AND title like CONCAT('%', ?, '%')";
-            $bind[] = $request['coin'];
+        if (isset($request['search'])) {
+            $where .= " AND (title like CONCAT('%', ?, '%') || description like CONCAT('%', ?, '%'))";
+            $bind = array($request['search'], $request['search']);
         }
 
         return [
-            'data'      => auth()->user()->Posts()->whereRaw($where, $bind)->limit($limit)->offset(($page - 1) * $limit)->get(),
+            'data'      => auth()->user()->Posts()->whereRaw($where, $bind)->orderBy('id', 'desc')->limit($limit)->offset(($page - 1) * $limit)->get(),
             'total'     => auth()->user()->Posts()->whereRaw($where, $bind)->count(),
             'page'      => $page,
             'per_page'  => $limit

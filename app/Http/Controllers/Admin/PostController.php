@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\PostRequest;
 use App\Http\Requests\RequestValidation;
 use App\Http\Resources\FailResponseResource;
 use App\Http\Resources\PaginationResponseResource;
@@ -98,10 +99,10 @@ class PostController extends Controller
      *    )
      *
      *
-     * @param RequestValidation $request
+     * @param PostRequest $request
      * @return JsonResponse
      */
-    public function store(RequestValidation $request): JsonResponse
+    public function store(PostRequest $request): JsonResponse
     {
         if ($status = $this->postRepository->create($request->all())) {
             return (new SuccessResponseResource($status))
@@ -146,11 +147,11 @@ class PostController extends Controller
      *          ),
      *     ),
      *    )
-     * @param RequestValidation $request
+     * @param PostRequest $request
      * @param Post $post
      * @return JsonResponse
      */
-    public function update(RequestValidation $request, Post $post): JsonResponse
+    public function update(PostRequest $request, Post $post): JsonResponse
     {
         if ($status = $this->postRepository->update($post, $request->all())) {
             return (new SuccessResponseResource($status))
