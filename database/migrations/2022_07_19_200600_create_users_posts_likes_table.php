@@ -13,16 +13,22 @@ class CreateUsersPostsLikesTable extends Migration
      */
     public function up()
     {
-        Schema::create('users_post_like', function (Blueprint $table) {
+        Schema::create('user_post_like', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('post_id');
 
             $table->foreign('user_id')
                 ->on('users')
-                ->references('id');
+                ->references('id')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
             $table->foreign('post_id')
                 ->on('posts')
-                ->references('id');
+                ->references('id')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
             $table->primary(['user_id', 'post_id']);
 
             $table->timestamps();
@@ -36,6 +42,6 @@ class CreateUsersPostsLikesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users_post_like');
+        Schema::dropIfExists('user_post_like');
     }
 }

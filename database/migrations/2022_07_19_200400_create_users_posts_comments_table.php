@@ -13,7 +13,7 @@ class CreateUsersPostsCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('users_post_comment', function (Blueprint $table) {
+        Schema::create('user_post_comment', function (Blueprint $table) {
             $table->id();
             $table->text('comment');
             $table->unsignedBigInteger('user_id');
@@ -21,10 +21,15 @@ class CreateUsersPostsCommentsTable extends Migration
 
             $table->foreign('user_id')
                 ->on('users')
-                ->references('id');
+                ->references('id')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
             $table->foreign('post_id')
                 ->on('posts')
-                ->references('id');
+                ->references('id')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
 
             $table->timestamps();
         });
@@ -37,6 +42,6 @@ class CreateUsersPostsCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users_post_comment');
+        Schema::dropIfExists('user_post_comment');
     }
 }
