@@ -47,7 +47,7 @@ class AuthController extends Controller
         if ($token = auth()->guard('api')->attempt($request->only('email', 'password'))){
             return response()->json(auth()->user()->responseWithToken($token), 200);
         }
-        return (new FailResponseResource(false))
+        return (new FailResponseResource(['message' => 'Credenciais inválidas!']))
             ->response()
             ->setStatusCode(401);
     }

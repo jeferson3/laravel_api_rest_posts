@@ -21,7 +21,7 @@ class FailResponseResource extends JsonResource
         return [
             'status'    => false,
             'timestamp' => now(),
-            'message'   => 'Falha ao realizar a operação!'
+            'message'   => $this->resource['message'] ?? 'Falha ao realizar a operação!'
         ];
     }
 }
