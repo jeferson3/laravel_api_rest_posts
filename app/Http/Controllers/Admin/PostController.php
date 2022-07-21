@@ -29,7 +29,6 @@ class PostController extends Controller
      *     path="/admin/posts",
      *     summary="PostController",
      *     @OA\Response(response="200", description="Response with success"),
-     *     @OA\Response(response="404", description="Response with error"),
      *     tags={"Admin-Post"},
      *     security={{ "jwt": {} }},
      *
