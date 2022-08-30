@@ -4,22 +4,20 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\PostCommentRequest;
-use App\Http\Requests\RequestValidation;
-use App\Http\Resources\FailResponseResource;
 use App\Http\Resources\PaginationResponseResource;
 use App\Http\Resources\SuccessResponseResource;
 use App\Jobs\CommentJob;
 use App\Jobs\LikeJob;
 use App\Models\Post;
-use App\Repositories\Customer\Post\PostRepository;
+use App\Repositories\Post\PostRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
-    private PostRepository $postRepository;
+    private PostRepositoryInterface $postRepository;
 
-    public function __construct(PostRepository $postRepository)
+    public function __construct(PostRepositoryInterface $postRepository)
     {
         $this->postRepository = $postRepository;
     }
@@ -69,7 +67,7 @@ class CustomerController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        return (new PaginationResponseResource($this->postRepository->getAll($request->toArray())))
+        return (new PaginationResponseResource($this->postRepository->getMyPosts($request->toArray())))
             ->response()
             ->setStatusCode(200);
     }

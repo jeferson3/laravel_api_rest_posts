@@ -4,20 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PostRequest;
-use App\Http\Requests\RequestValidation;
 use App\Http\Resources\FailResponseResource;
 use App\Http\Resources\PaginationResponseResource;
 use App\Http\Resources\SuccessResponseResource;
 use App\Models\Post;
-use App\Repositories\Admin\Post\PostRepository;
+use App\Repositories\Post\PostRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    private PostRepository $postRepository;
+    private PostRepositoryInterface $postRepository;
 
-    public function __construct(PostRepository $postRepository)
+    public function __construct(PostRepositoryInterface $postRepository)
     {
         $this->postRepository = $postRepository;
     }

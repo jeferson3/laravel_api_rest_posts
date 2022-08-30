@@ -22,7 +22,7 @@ class Post extends JsonResource
             "title"         => $this->title,
             "description"   => $this->description,
             "date"          => $this->created_at->format('d/m/Y H:i:s'),
-            "author"        => $this->user->name,
+            "author"        => $this->user->name === auth()->user()->name ? 'Me' : $this->user->name,
             "likes"         => $this->likes_count,
             "comments"      => Comment::collection($this->whenLoaded('Comments'))
         ];
